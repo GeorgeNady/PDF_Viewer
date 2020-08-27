@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.view.View
 import android.webkit.WebChromeClient
+import android.webkit.WebResourceRequest
 import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 
@@ -28,12 +30,14 @@ class MainActivity2 : AppCompatActivity() {
         webView.webChromeClient = object : WebChromeClient() {
             override fun onProgressChanged(view: WebView?, newProgress: Int) {
                 super.onProgressChanged(view, newProgress)
+                if (newProgress == 100) progressBar.visibility = View.GONE
+            }
+        }
 
-
-                if (newProgress == 100) {
-                    progressBar.visibility = View.GONE
-                }
-
+        webView.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
+                view.loadUrl(request.url.toString())
+                return false
             }
         }
 
